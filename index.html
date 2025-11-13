@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Twits – Essay App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f4f5fb;
+      --card-bg: #ffffff;
+      --accent: #4f46e5;
+      --accent-light: #e0e7ff;
+      --accent-strong: #4338ca;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-subtle: #e5e7eb;
+      --danger: #b91c1c;
+      --ok: #15803d;
+      --warning: #b45309;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e0e7ff 0, #f4f5fb 45%, #f9fafb 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 24px;
+    }
+
+    .app-shell {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      border-radius: 28px;
+      box-shadow: var(--shadow-soft);
+      padding: 24px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 1.55rem;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-pill {
+      background: var(--accent-light);
+      color: var(--accent-strong);
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .title-block p {
+      margin: 4px 0 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .student-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .student-info label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .student-info input {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      min-width: 160px;
+      outline: none;
+      background: #f9fafb;
+    }
+
+    .student-info input:focus {
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+    }
+
+    /* Progress bar */
+    .progress-wrapper {
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .progress-bar {
+      position: relative;
+      height: 9px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5, #22c55e);
+      transition: width 0.2s ease-out;
+    }
+
+    .steps-indicator {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .steps-indicator span {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #d1d5db;
+    }
+
+    .steps-indicator span.active {
+      background: var(--accent);
+      transform: scale(1.1);
+    }
+
+    /* Main layout */
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 3.5fr) minmax(0, 2.5fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 18px 18px 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card h2 span.emoji {
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      margin-top: 4px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .field-group {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .field-group small {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      min-height: 60px;
+      resize: vertical;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #f9fafb;
+      outline: none;
+    }
+
+    textarea:focus,
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.12);
+    }
+
+    textarea.essay-box {
+      min-height: 220px;
+      line-height: 1.5;
+    }
+
+    .tips-card {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #f9fafb;
+      border: 1px dashed #cbd5f5;
+      margin-top: 10px;
+      font-size: 0.8rem;
+    }
+
+    .tips-card h3 {
+      margin: 0 0 4px;
+      font-size: 0.86rem;
+    }
+
+    .tips-card ul {
+      padding-left: 18px;
+      margin: 4px 0;
+    }
+
+    .tips-card li {
+      margin-bottom: 2px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background 0.15s;
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+    }
+
+    button.primary:hover {
+      background: var(--accent-strong);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.4);
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.secondary:hover {
+      background: #d1d5db;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(148, 163, 184, 0.45);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .word-count {
+      margin-top: 4px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    .word-count.ok {
+      color: var(--ok);
+    }
+
+    .word-count.low,
+    .word-count.high {
+      color: var(--warning);
+    }
+
+    .word-count.critical {
+      color: var(--danger);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .pill.info {
+      background: var(--accent-light);
+      color: var(--accent-strong);
+    }
+
+    .pill.muted {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .checklist {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.86rem;
+    }
+
+    .checklist label {
+      font-weight: 500;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .checklist input[type="checkbox"] {
+      margin-top: 3px;
+    }
+
+    .readonly-box {
+      white-space: pre-wrap;
+      font-size: 0.9rem;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      max-height: 380px;
+      overflow: auto;
+    }
+
+    .final-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .status-message {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .status-message strong {
+      color: var(--accent-strong);
+    }
+
+    .small-muted {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="title-block">
+        <h1>
+          The Twits – Essay
+          <span class="title-pill">Mr Muggle-Wump</span>
+        </h1>
+        <p>Write and save your essay about life as a prisoner at the Twits' house – and your escape.</p>
+        <div class="progress-wrapper">
+          <div class="progress-labels">
+            <span id="progress-text">Step 1 of 5 – Get into character</span>
+            <span>150–400 words</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="steps-indicator" id="steps-indicator">
+            <!-- dynamic dots -->
+          </div>
+        </div>
+      </div>
+      <div class="student-info">
+        <label>
+          Name
+          <input type="text" id="student-name" placeholder="Write your name" />
+        </label>
+        <label>
+          Class
+          <input type="text" id="student-class" placeholder="e.g. 9A" />
+        </label>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT COLUMN: Steps -->
+      <section class="card">
+        <!-- STEP 1 -->
+        <div class="step active" data-step="1">
+          <h2><span class="emoji">🎭</span> Step 1 – Get into character</h2>
+          <p>Imagine that you <strong>are Mr Muggle-Wump</strong>, the monkey. Answer these questions to get into your role.</p>
+
+          <div class="field-group">
+            <label for="role-who">Who are you?</label>
+            <small>Write as Mr Muggle-Wump. Example: <em>I am Mr Muggle-Wump, a monkey who lives in…</em></small>
+            <textarea id="role-who" placeholder="I am Mr Muggle-Wump, a monkey who..."></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="role-feelings">How do you feel in the Twits’ house? Why?</label>
+            <small>Use feelings and reasons. Example: <em>I feel … because …</em></small>
+            <textarea id="role-feelings" placeholder="I feel... because..."></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="role-memory">What do you remember best from the book?</label>
+            <small>Write about one or two scenes that you remember clearly.</small>
+            <textarea id="role-memory" placeholder="One thing I remember very clearly is..."></textarea>
+          </div>
+
+          <div class="buttons">
+            <button class="secondary" type="button" id="step1-save">💾 Save</button>
+            <button class="primary" type="button" id="to-step-2">Next: Plan your essay →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" data-step="2">
+          <h2><span class="emoji">🧠</span> Step 2 – Plan your essay</h2>
+          <p>Use these boxes to plan your essay. You will use your ideas in the next step.</p>
+
+          <div class="field-group">
+            <label for="plan-house">
+              The Twits’ house, garden and your masters
+            </label>
+            <small>Describe the garden and the house. What do Mr and Mrs Twit look like? How do they behave?</small>
+            <textarea id="plan-house"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="plan-treatment">
+              How they treat you, your family and other animals
+            </label>
+            <small>Use strong adjectives: cruel, horrible, disgusting, unfair...</small>
+            <textarea id="plan-treatment"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="plan-bird">
+              The Roly-Poly Bird
+            </label>
+            <small>Who is the Roly-Poly Bird? How does the bird help you?</small>
+            <textarea id="plan-bird"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="plan-plan">
+              Your plan to escape
+            </label>
+            <small>Describe your secret plan. What is the idea? Who helps you?</small>
+            <textarea id="plan-plan"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="plan-escape">
+              Your escape
+            </label>
+            <small>How do you escape? What happens in the end?</small>
+            <textarea id="plan-escape"></textarea>
+          </div>
+
+          <p class="small-muted">
+            Remember: you are writing in the <strong>first person ("I")</strong> as Mr Muggle-Wump.
+          </p>
+
+          <div class="buttons">
+            <button class="secondary" type="button" id="back-to-1">← Back</button>
+            <div style="display:flex; gap:8px;">
+              <button class="secondary" type="button" id="step2-save">💾 Save</button>
+              <button class="primary" type="button" id="to-step-3">Next: Write your essay →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" data-step="3">
+          <h2><span class="emoji">✍️</span> Step 3 – Write your essay</h2>
+          <p>Write your essay as Mr Muggle-Wump. Use your plan. Aim for <strong>150–400 words</strong>.</p>
+          <span class="pill info">Tip: Paragraphs make your text easier to read.</span>
+
+          <div class="field-group">
+            <label for="essay-text">Your essay</label>
+            <textarea id="essay-text" class="essay-box" placeholder="I still remember the first day Mr and Mrs Twit caught me..."></textarea>
+            <div id="word-count" class="word-count">Words: 0 (target: 150–400)</div>
+          </div>
+
+          <div class="buttons">
+            <button class="secondary" type="button" id="back-to-2">← Back</button>
+            <div style="display:flex; gap:8px;">
+              <button class="secondary" type="button" id="step3-save">💾 Save draft</button>
+              <button class="primary" type="button" id="to-step-4">Next: Check your text →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step" data-step="4">
+          <h2><span class="emoji">✅</span> Step 4 – Check your text</h2>
+          <p>Before you hand in your essay, go through this checklist.</p>
+
+          <div class="checklist">
+            <label>
+              <input type="checkbox" id="check-spelling" />
+              <span>Spelling: I have checked my spelling.</span>
+            </label>
+            <label>
+              <input type="checkbox" id="check-grammar" />
+              <span>Grammar: I have checked verbs (past tense), capital letters and full stops.</span>
+            </label>
+            <label>
+              <input type="checkbox" id="check-content" />
+              <span>
+                Content: I wrote about the garden and house, how they treat us and other animals, the Roly-Poly Bird, our plan and our escape.
+              </span>
+            </label>
+            <label>
+              <input type="checkbox" id="check-paragraphs" />
+              <span>Paragraphs: My text is divided into clear paragraphs.</span>
+            </label>
+            <label>
+              <input type="checkbox" id="check-length" />
+              <span>Length: My text is between 150–400 words.</span>
+            </label>
+          </div>
+
+          <div class="field-group">
+            <label for="note-teacher">Note to your teacher (optional)</label>
+            <small>Is there anything you are unsure about?</small>
+            <textarea id="note-teacher" placeholder="I am unsure about..."></textarea>
+          </div>
+
+          <div class="buttons">
+            <button class="secondary" type="button" id="back-to-3">← Back</button>
+            <div style="display:flex; gap:8px;">
+              <button class="secondary" type="button" id="step4-save">💾 Save</button>
+              <button class="primary" type="button" id="to-step-5">I am ready →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step" data-step="5">
+          <h2><span class="emoji">🎉</span> Step 5 – Final text</h2>
+          <p>This is your final text. Now you can copy it and hand it in.</p>
+
+          <div class="field-group">
+            <label>Your essay</label>
+            <div id="final-text" class="readonly-box"></div>
+          </div>
+
+          <div class="final-actions">
+            <button class="primary" type="button" id="copy-text">📋 Copy essay</button>
+            <button class="secondary" type="button" id="back-to-4">← Back to checklist</button>
+            <button class="secondary" type="button" id="reset-app">🗑️ Clear all data</button>
+          </div>
+
+          <div class="status-message" id="copy-status"></div>
+          <p class="small-muted">
+            Your work is automatically saved in this browser using <strong>local storage</strong>. If you clear the data, everything will be removed from this device.
+          </p>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Tips / side panel -->
+      <aside class="card">
+        <h2><span class="emoji">💡</span> Help & structure</h2>
+        <p>Use this guide while you write. You can read it in every step.</p>
+
+        <div class="tips-card">
+          <h3>Structure – Example paragraphs</h3>
+          <ul>
+            <li><strong>Paragraph 1:</strong> Life as a prisoner – house, garden, the Twits, your feelings.</li>
+            <li><strong>Paragraph 2:</strong> How they treat you, your family and other animals.</li>
+            <li><strong>Paragraph 3:</strong> The Roly-Poly Bird and your plan.</li>
+            <li><strong>Paragraph 4:</strong> The escape and the ending.</li>
+          </ul>
+        </div>
+
+        <div class="tips-card">
+          <h3>Useful phrases</h3>
+          <ul>
+            <li>I feel… because…</li>
+            <li>Every day, I have to…</li>
+            <li>They always… / They never…</li>
+            <li>Finally, we decided to…</li>
+            <li>In the end…</li>
+          </ul>
+        </div>
+
+        <div class="tips-card">
+          <h3>Word count</h3>
+          <p>
+            The target is <strong>150–400 words</strong>. Fewer than 150 is too short. More than 400 can be difficult to read – try to be clear and effective.
+          </p>
+          <p class="small-muted">
+            The counter updates automatically when you write in the essay box.
+          </p>
+        </div>
+
+        <div class="tips-card">
+          <h3>Remember</h3>
+          <ul>
+            <li>You are Mr Muggle-Wump – use “I”.</li>
+            <li>Use past tense when you tell your story.</li>
+            <li>Use full stops and capital letters.</li>
+            <li>Think about feelings and details from the book.</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "twitsEssayApp_v1";
+
+    const TOTAL_STEPS = 5;
+    let currentStep = 1;
+    let state = {
+      studentName: "",
+      studentClass: "",
+      roleWho: "",
+      roleFeelings: "",
+      roleMemory: "",
+      planHouse: "",
+      planTreatment: "",
+      planBird: "",
+      planPlan: "",
+      planEscape: "",
+      essayText: "",
+      checkSpelling: false,
+      checkGrammar: false,
+      checkContent: false,
+      checkParagraphs: false,
+      checkLength: false,
+      noteTeacher: "",
+      lastStep: 1
+    };
+
+    function loadState() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          state = { ...state, ...parsed };
+          currentStep = parsed.lastStep || 1;
+        }
+      } catch (e) {
+        console.error("Error loading state", e);
+      }
+    }
+
+    function saveState() {
+      state.lastStep = currentStep;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function countWords(text) {
+      if (!text || !text.trim()) return 0;
+      return text.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function updateWordCountDisplay() {
+      const essayText = document.getElementById("essay-text").value;
+      const words = countWords(essayText);
+      const wc = document.getElementById("word-count");
+      state.essayText = essayText;
+      const MIN = 150;
+      const MAX = 400;
+
+      wc.textContent = `Words: ${words} (target: ${MIN}–${MAX})`;
+      wc.classList.remove("ok", "low", "high", "critical");
+
+      if (words === 0) {
+        wc.classList.add("critical");
+      } else if (words < MIN) {
+        wc.classList.add(words < MIN / 2 ? "critical" : "low");
+      } else if (words > MAX) {
+        wc.classList.add("high");
+      } else {
+        wc.classList.add("ok");
+      }
+
+      saveState();
+    }
+
+    function updateProgressUI() {
+      const percent = ((currentStep - 1) / (TOTAL_STEPS - 1)) * 100;
+      document.getElementById("progress-fill").style.width = percent + "%";
+
+      const progressText = document.getElementById("progress-text");
+      const descriptions = {
+        1: "Step 1 of 5 – Get into character",
+        2: "Step 2 of 5 – Plan your essay",
+        3: "Step 3 of 5 – Write your essay",
+        4: "Step 4 of 5 – Check your text",
+        5: "Step 5 of 5 – Final text"
+      };
+      progressText.textContent = descriptions[currentStep] || "";
+
+      const dotsContainer = document.getElementById("steps-indicator");
+      dotsContainer.innerHTML = "";
+      for (let i = 1; i <= TOTAL_STEPS; i++) {
+        const dot = document.createElement("span");
+        if (i === currentStep) dot.classList.add("active");
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function showStep(stepNumber) {
+      currentStep = stepNumber;
+      document.querySelectorAll(".step").forEach(step => {
+        const s = Number(step.getAttribute("data-step"));
+        if (s === stepNumber) {
+          step.classList.add("active");
+        } else {
+          step.classList.remove("active");
+        }
+      });
+      updateProgressUI();
+
+      if (currentStep === 3) {
+        updateWordCountDisplay();
+      }
+      if (currentStep === 5) {
+        document.getElementById("final-text").textContent = state.essayText || "";
+      }
+      saveState();
+    }
+
+    function bindInputsToState() {
+      const idMap = {
+        "student-name": "studentName",
+        "student-class": "studentClass",
+        "role-who": "roleWho",
+        "role-feelings": "roleFeelings",
+        "role-memory": "roleMemory",
+        "plan-house": "planHouse",
+        "plan-treatment": "planTreatment",
+        "plan-bird": "planBird",
+        "plan-plan": "planPlan",
+        "plan-escape": "planEscape",
+        "essay-text": "essayText",
+        "note-teacher": "noteTeacher"
+      };
+
+      Object.entries(idMap).forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const eventType = el.tagName === "TEXTAREA" || el.tagName === "INPUT" ? "input" : "change";
+        el.addEventListener(eventType, () => {
+          state[key] = el.value;
+          if (id === "essay-text") {
+            updateWordCountDisplay();
+          } else {
+            saveState();
+          }
+        });
+      });
+
+      const checkMap = {
+        "check-spelling": "checkSpelling",
+        "check-grammar": "checkGrammar",
+        "check-content": "checkContent",
+        "check-paragraphs": "checkParagraphs",
+        "check-length": "checkLength"
+      };
+
+      Object.entries(checkMap).forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener("change", () => {
+          state[key] = el.checked;
+          saveState();
+        });
+      });
+    }
+
+    function populateFromState() {
+      document.getElementById("student-name").value = state.studentName || "";
+      document.getElementById("student-class").value = state.studentClass || "";
+
+      document.getElementById("role-who").value = state.roleWho || "";
+      document.getElementById("role-feelings").value = state.roleFeelings || "";
+      document.getElementById("role-memory").value = state.roleMemory || "";
+
+      document.getElementById("plan-house").value = state.planHouse || "";
+      document.getElementById("plan-treatment").value = state.planTreatment || "";
+      document.getElementById("plan-bird").value = state.planBird || "";
+      document.getElementById("plan-plan").value = state.planPlan || "";
+      document.getElementById("plan-escape").value = state.planEscape || "";
+
+      document.getElementById("essay-text").value = state.essayText || "";
+      document.getElementById("note-teacher").value = state.noteTeacher || "";
+
+      document.getElementById("check-spelling").checked = !!state.checkSpelling;
+      document.getElementById("check-grammar").checked = !!state.checkGrammar;
+      document.getElementById("check-content").checked = !!state.checkContent;
+      document.getElementById("check-paragraphs").checked = !!state.checkParagraphs;
+      document.getElementById("check-length").checked = !!state.checkLength;
+
+      updateWordCountDisplay();
+    }
+
+    function attachStepButtons() {
+      document.getElementById("step1-save").addEventListener("click", () => {
+        saveState();
+        alert("Step 1 saved to this device.");
+      });
+
+      document.getElementById("step2-save").addEventListener("click", () => {
+        saveState();
+        alert("Plan saved to this device.");
+      });
+
+      document.getElementById("step3-save").addEventListener("click", () => {
+        saveState();
+        alert("Draft saved to this device.");
+      });
+
+      document.getElementById("step4-save").addEventListener("click", () => {
+        saveState();
+        alert("Checklist saved to this device.");
+      });
+
+      document.getElementById("to-step-2").addEventListener("click", () => showStep(2));
+      document.getElementById("back-to-1").addEventListener("click", () => showStep(1));
+      document.getElementById("to-step-3").addEventListener("click", () => showStep(3));
+      document.getElementById("back-to-2").addEventListener("click", () => showStep(2));
+      document.getElementById("back-to-3").addEventListener("click", () => showStep(3));
+
+      document.getElementById("to-step-4").addEventListener("click", () => {
+        const words = countWords(document.getElementById("essay-text").value);
+        if (words < 150) {
+          if (!confirm("Your essay is shorter than 150 words. Are you sure you want to continue?")) {
+            return;
+          }
+        }
+        if (words > 400) {
+          if (!confirm("Your essay is longer than 400 words. Are you sure you want to continue?")) {
+            return;
+          }
+        }
+        showStep(4);
+      });
+
+      document.getElementById("to-step-5").addEventListener("click", () => {
+        const words = countWords(document.getElementById("essay-text").value);
+        if (words < 150 || words > 400) {
+          const proceed = confirm(
+            "Your text is not between 150–400 words. Do you still want to continue to the final step?"
+          );
+          if (!proceed) return;
+        }
+        showStep(5);
+      });
+
+      document.getElementById("back-to-4").addEventListener("click", () => showStep(4));
+
+      document.getElementById("copy-text").addEventListener("click", async () => {
+        const text = state.essayText || "";
+        const status = document.getElementById("copy-status");
+        if (!text.trim()) {
+          status.innerHTML = "<strong>No text to copy.</strong>";
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(text);
+          status.innerHTML = "<strong>Copied!</strong> You can now paste it into Classroom/Teams.";
+        } catch (e) {
+          status.textContent = "Could not copy automatically. Please select the text and copy it manually.";
+        }
+      });
+
+      document.getElementById("reset-app").addEventListener("click", () => {
+        if (confirm("This will delete all saved data for this app on this device. Continue?")) {
+          localStorage.removeItem(STORAGE_KEY);
+          location.reload();
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      bindInputsToState();
+      populateFromState();
+      attachStepButtons();
+      showStep(currentStep || 1);
+    });
+  </script>
+</body>
+</html>
