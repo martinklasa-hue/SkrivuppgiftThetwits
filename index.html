@@ -115,7 +115,6 @@
       box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
     }
 
-    /* Progress bar */
     .progress-wrapper {
       width: 100%;
       margin-top: 4px;
@@ -162,7 +161,6 @@
       transform: scale(1.1);
     }
 
-    /* Main layout */
     main {
       display: grid;
       grid-template-columns: minmax(0, 3.5fr) minmax(0, 2.5fr);
@@ -437,9 +435,7 @@
           <div class="progress-bar">
             <div class="progress-fill" id="progress-fill"></div>
           </div>
-          <div class="steps-indicator" id="steps-indicator">
-            <!-- dynamic dots -->
-          </div>
+          <div class="steps-indicator" id="steps-indicator"></div>
         </div>
       </div>
       <div class="student-info">
@@ -459,43 +455,37 @@
       <section class="card">
         <!-- STEP 1 -->
         <div class="step active" data-step="1">
-          <h2><span class="emoji">🎭</span> Step 1 – Get into character</h2>
-          <p>Imagine that you <strong>are Mr Muggle-Wump</strong>, the monkey. Answer these questions to get into your role.</p>
+          <h2><span class="emoji">🎭</span> Step 1 – Quick warm-up</h2>
+          <p>Very short answers – just <strong>1–2 sentences</strong> in each box. This is only to get started.</p>
 
           <div class="field-group">
-            <label for="role-who">Who are you?</label>
-            <small>Write as Mr Muggle-Wump. Example: <em>I am Mr Muggle-Wump, a monkey who lives in…</em></small>
-            <textarea id="role-who" placeholder="I am Mr Muggle-Wump, a monkey who..."></textarea>
+            <label for="role-who">Who are you and where are you?</label>
+            <small>Write as Mr Muggle-Wump. Example: <em>I am Mr Muggle-Wump, a monkey trapped in the Twits’ garden.</em></small>
+            <textarea id="role-who" placeholder="I am Mr Muggle-Wump, a monkey..."></textarea>
           </div>
 
           <div class="field-group">
-            <label for="role-feelings">How do you feel in the Twits’ house? Why?</label>
-            <small>Use feelings and reasons. Example: <em>I feel … because …</em></small>
+            <label for="role-feelings">How do you feel as a prisoner? Why?</label>
+            <small>One or two sentences. Example: <em>I feel ... because ...</em></small>
             <textarea id="role-feelings" placeholder="I feel... because..."></textarea>
-          </div>
-
-          <div class="field-group">
-            <label for="role-memory">What do you remember best from the book?</label>
-            <small>Write about one or two scenes that you remember clearly.</small>
-            <textarea id="role-memory" placeholder="One thing I remember very clearly is..."></textarea>
           </div>
 
           <div class="buttons">
             <button class="secondary" type="button" id="step1-save">💾 Save</button>
-            <button class="primary" type="button" id="to-step-2">Next: Plan your essay →</button>
+            <button class="primary" type="button" id="to-step-2">Next: Plan (short notes) →</button>
           </div>
         </div>
 
         <!-- STEP 2 -->
         <div class="step" data-step="2">
-          <h2><span class="emoji">🧠</span> Step 2 – Plan your essay</h2>
-          <p>Use these boxes to plan your essay. You will use your ideas in the next step.</p>
+          <h2><span class="emoji">🧠</span> Step 2 – Short notes for your plan</h2>
+          <p>Only write <strong>few words or very short sentences</strong>. This is a quick plan, not a full text.</p>
 
           <div class="field-group">
             <label for="plan-house">
               The Twits’ house, garden and your masters
             </label>
-            <small>Describe the garden and the house. What do Mr and Mrs Twit look like? How do they behave?</small>
+            <small>3–5 keywords or very short sentences. Example: <em>dirty garden, ugly house, horrible beard...</em></small>
             <textarea id="plan-house"></textarea>
           </div>
 
@@ -503,7 +493,7 @@
             <label for="plan-treatment">
               How they treat you, your family and other animals
             </label>
-            <small>Use strong adjectives: cruel, horrible, disgusting, unfair...</small>
+            <small>Just short notes. Example: <em>hang us upside down, no food, cruel, unfair...</em></small>
             <textarea id="plan-treatment"></textarea>
           </div>
 
@@ -511,7 +501,7 @@
             <label for="plan-bird">
               The Roly-Poly Bird
             </label>
-            <small>Who is the Roly-Poly Bird? How does the bird help you?</small>
+            <small>Who helps you? 2–3 words or a short sentence.</small>
             <textarea id="plan-bird"></textarea>
           </div>
 
@@ -519,7 +509,7 @@
             <label for="plan-plan">
               Your plan to escape
             </label>
-            <small>Describe your secret plan. What is the idea? Who helps you?</small>
+            <small>Short notes: <em>glue on ceiling, birds warn us...</em></small>
             <textarea id="plan-plan"></textarea>
           </div>
 
@@ -527,12 +517,12 @@
             <label for="plan-escape">
               Your escape
             </label>
-            <small>How do you escape? What happens in the end?</small>
+            <small>What happens in the end? One short sentence or some keywords.</small>
             <textarea id="plan-escape"></textarea>
           </div>
 
           <p class="small-muted">
-            Remember: you are writing in the <strong>first person ("I")</strong> as Mr Muggle-Wump.
+            This is only your <strong>plan</strong>. The real writing happens in Step 3.
           </p>
 
           <div class="buttons">
@@ -547,7 +537,7 @@
         <!-- STEP 3 -->
         <div class="step" data-step="3">
           <h2><span class="emoji">✍️</span> Step 3 – Write your essay</h2>
-          <p>Write your essay as Mr Muggle-Wump. Use your plan. Aim for <strong>150–400 words</strong>.</p>
+          <p>Now you write the real text as Mr Muggle-Wump. Use your short notes. Aim for <strong>150–400 words</strong>.</p>
           <span class="pill info">Tip: Paragraphs make your text easier to read.</span>
 
           <div class="field-group">
@@ -692,7 +682,6 @@
       studentClass: "",
       roleWho: "",
       roleFeelings: "",
-      roleMemory: "",
       planHouse: "",
       planTreatment: "",
       planBird: "",
@@ -805,7 +794,6 @@
         "student-class": "studentClass",
         "role-who": "roleWho",
         "role-feelings": "roleFeelings",
-        "role-memory": "roleMemory",
         "plan-house": "planHouse",
         "plan-treatment": "planTreatment",
         "plan-bird": "planBird",
@@ -818,7 +806,7 @@
       Object.entries(idMap).forEach(([id, key]) => {
         const el = document.getElementById(id);
         if (!el) return;
-        const eventType = el.tagName === "TEXTAREA" || el.tagName === "INPUT" ? "input" : "change";
+        const eventType = "input";
         el.addEventListener(eventType, () => {
           state[key] = el.value;
           if (id === "essay-text") {
@@ -853,7 +841,6 @@
 
       document.getElementById("role-who").value = state.roleWho || "";
       document.getElementById("role-feelings").value = state.roleFeelings || "";
-      document.getElementById("role-memory").value = state.roleMemory || "";
 
       document.getElementById("plan-house").value = state.planHouse || "";
       document.getElementById("plan-treatment").value = state.planTreatment || "";
@@ -961,3 +948,4 @@
   </script>
 </body>
 </html>
+
