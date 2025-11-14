@@ -158,8 +158,12 @@ button{
   <h2>✍️ Step 3 – Write your essay</h2>
   <p>Now write your full story as Mr Muggle-Wump. Aim for <strong>150–400 words</strong>.</p>
 
-  <textarea id="essay-text" class="essay" placeholder="Start your story here..."></textarea>
-  <div id="word-count" class="word-count">Words: 0</div>
+  textarea.essay {
+  min-height: 300px;
+  width: 100%;          /* gör den lika bred som kortet */
+  max-width: 100%;      /* hindrar att den krymper */
+  box-sizing: border-box;
+}
 
   <button class="secondary" onclick="goStep(2)">← Back</button>
   <button class="primary" onclick="goStep(4)">Next →</button>
