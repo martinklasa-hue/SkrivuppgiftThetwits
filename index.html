@@ -41,7 +41,14 @@ textarea,input[type=text]{
   background:#fafafa;resize:vertical;font-family:inherit;font-size:0.9rem;
 }
 textarea{min-height:70px;}
-textarea.essay{min-height:300px;} /* större skrivruta */
+
+/* ⭐ BREDARE SKRIVRUTA I STEG 3 ⭐ */
+textarea.essay {
+  min-height:300px;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
 
 button{
   border:none;cursor:pointer;padding:8px 14px;font-weight:600;
@@ -77,11 +84,11 @@ button{
   </div>
   <div class="student-info">
     <div>
-      <label>Name</label>
+      <label>Name</label><br>
       <input id="student-name" type="text" placeholder="Your name" />
     </div>
     <div>
-      <label>Class</label>
+      <label>Class</label><br>
       <input id="student-class" type="text" placeholder="9A" />
     </div>
   </div>
@@ -114,12 +121,12 @@ button{
 <!-- STEP 2 -->
 <div class="step" data-step="2">
   <h2>🧠 Step 2 – Short notes</h2>
-  <p>Use these boxes to make quick notes that will help you write your essay in Step 3.  
+  <p>Use these boxes to make quick notes that will help you write your essay in Step 3.<br>
      Only write a few words or very short sentences – not a full text.</p>
 
   <div class="field-group">
     <label>The Twits’ house and garden</label>
-    <small>Short notes only (3–5 keywords or very short sentences).</small>
+    <small>Short notes only.</small>
     <textarea id="plan-house"></textarea>
   </div>
 
@@ -143,7 +150,7 @@ button{
 
   <div class="field-group">
     <label>Your escape</label>
-    <small>What happens in the end? Short notes.</small>
+    <small>What happens in the end?</small>
     <textarea id="plan-escape"></textarea>
   </div>
 
@@ -156,14 +163,10 @@ button{
 <!-- STEP 3 -->
 <div class="step" data-step="3">
   <h2>✍️ Step 3 – Write your essay</h2>
-  <p>Now write your full story as Mr Muggle-Wump. Aim for <strong>150–400 words</strong>.</p>
+  <p>Write your full story as Mr Muggle-Wump. Aim for <strong>150–400 words</strong>.</p>
 
-<textarea.essay {
-  min-height: 300px;
-  width: 100%;          /* gör den lika bred som kortet */
-  max-width: 100%;      /* hindrar att den krymper */
-  box-sizing: border-box;
-}
+  <textarea id="essay-text" class="essay" placeholder="Start your story here..."></textarea>
+  <div id="word-count" class="word-count">Words: 0</div>
 
   <button class="secondary" onclick="goStep(2)">← Back</button>
   <button class="primary" onclick="goStep(4)">Next →</button>
@@ -175,15 +178,15 @@ button{
 
   <div>
     <label><input type="checkbox" id="chk-spell"> Spelling checked</label><br>
-    <label><input type="checkbox" id="chk-grammar"> Grammar checked (past tense, capital letters, full stops)</label><br>
-    <label><input type="checkbox" id="chk-content"> Content: house & garden, treatment, Roly-Poly Bird, plan, escape</label><br>
+    <label><input type="checkbox" id="chk-grammar"> Grammar checked</label><br>
+    <label><input type="checkbox" id="chk-content"> Content included</label><br>
     <label><input type="checkbox" id="chk-paragraphs"> Clear paragraphs</label><br>
-    <label><input type="checkbox" id="chk-length"> Between 150–400 words</label>
+    <label><input type="checkbox" id="chk-length"> 150–400 words</label>
   </div>
 
   <div class="field-group">
     <label>Note to teacher (optional)</label>
-    <textarea id="note-teacher" placeholder="I am unsure about..."></textarea>
+    <textarea id="note-teacher"></textarea>
   </div>
 
   <button class="secondary" onclick="goStep(3)">← Back</button>
@@ -200,7 +203,7 @@ button{
   <button class="secondary" onclick="resetAll()">Clear all data</button>
 
   <p id="copy-status" class="small-muted"></p>
-  <p class="small-muted">Your work is automatically saved in this browser using local storage.</p>
+  <p class="small-muted">Your work is automatically saved in this browser.</p>
 </div>
 
 </section>
@@ -210,12 +213,12 @@ button{
   <h3>💡 Help & structure</h3>
 
   <div class="tips">
-    <h4>Structure – example paragraphs</h4>
+    <h4>Structure</h4>
     <ul>
-      <li>Paragraph 1: Life as a prisoner – house, garden, the Twits, your feelings.</li>
-      <li>Paragraph 2: How they treat you, your family and other animals.</li>
-      <li>Paragraph 3: The Roly-Poly Bird and your plan.</li>
-      <li>Paragraph 4: The escape and the ending.</li>
+      <li>Paragraph 1: Life as a prisoner.</li>
+      <li>Paragraph 2: How they treat you.</li>
+      <li>Paragraph 3: The Roly-Poly Bird & plan.</li>
+      <li>Paragraph 4: Escape & ending.</li>
     </ul>
   </div>
 
@@ -232,20 +235,16 @@ button{
 
   <div class="tips">
     <h4>Word count</h4>
-    <p>The target is <strong>150–400 words</strong>.</p>
-    <p class="small-muted">
-      Fewer than 150 is usually too short. More than 400 can be hard to read – try to be clear and effective.
-      The counter updates automatically when you write.
-    </p>
+    <p>Target: <strong>150–400 words</strong>.</p>
   </div>
 
   <div class="tips">
     <h4>Remember</h4>
     <ul>
-      <li>You are Mr Muggle-Wump – use “I”.</li>
-      <li>Use past tense when you tell your story.</li>
-      <li>Use full stops and capital letters.</li>
-      <li>Think about feelings and details from the book.</li>
+      <li>You are Mr Muggle-Wump.</li>
+      <li>Use past tense.</li>
+      <li>Use paragraphs.</li>
+      <li>Include feelings and details.</li>
     </ul>
   </div>
 </aside>
@@ -254,7 +253,6 @@ button{
 </div>
 
 <script>
-// STATE
 const KEY="twitsEssayState";
 let state={
   step:1, name:"", class:"",
@@ -265,20 +263,13 @@ let state={
   c1:false,c2:false,c3:false,c4:false,c5:false
 };
 
-// LOAD
 function load(){
   let s=localStorage.getItem(KEY);
-  if(s){ state={...state,...JSON.parse(s)} }
-  fill();
-  goStep(state.step);
+  if(s) state={...state,...JSON.parse(s)};
+  fill(); goStep(state.step);
 }
+function save(){ localStorage.setItem(KEY,JSON.stringify(state)); }
 
-// SAVE
-function save(){
-  localStorage.setItem(KEY,JSON.stringify(state));
-}
-
-// CHANGE STEP
 function goStep(n){
   state.step=n; save();
   document.querySelectorAll(".step").forEach(el=>{
@@ -290,7 +281,6 @@ function goStep(n){
   }
 }
 
-// FILL FIELDS
 function fill(){
   id("student-name").value=state.name;
   id("student-class").value=state.class;
@@ -313,11 +303,9 @@ function fill(){
   updateCount();
 }
 
-// SHORTCUTS
 function id(x){return document.getElementById(x)}
 function chk(x){return document.getElementById(x)}
 
-// INPUT EVENTS
 document.addEventListener("input", e=>{
   let t=e.target.id;
   if(t=="student-name") state.name=e.target.value;
@@ -331,10 +319,10 @@ document.addEventListener("input", e=>{
   if(t=="plan-escape") state.escape=e.target.value;
   if(t=="essay-text"){ state.essay=e.target.value; updateCount(); }
   if(t=="note-teacher") state.note=e.target.value;
+
   save();
 });
 
-// CHECKBOX EVENTS
 document.addEventListener("change", e=>{
   let t=e.target.id;
   if(t=="chk-spell") state.c1=e.target.checked;
@@ -342,10 +330,10 @@ document.addEventListener("change", e=>{
   if(t=="chk-content") state.c3=e.target.checked;
   if(t=="chk-paragraphs") state.c4=e.target.checked;
   if(t=="chk-length") state.c5=e.target.checked;
+
   save();
 });
 
-// WORD COUNT
 function updateCount(){
   let w=state.essay.trim().split(/\s+/).filter(Boolean).length;
   let el=id("word-count");
@@ -357,22 +345,16 @@ function updateCount(){
   else el.classList.add("ok");
 }
 
-// COPY
 function copyEssay(){
-  if(!state.essay.trim()){
-    id("copy-status").textContent="No text to copy.";
-    return;
-  }
   navigator.clipboard.writeText(state.essay).then(()=>{
-    id("copy-status").textContent="Copied! You can paste it into Classroom/Teams.";
+    id("copy-status").textContent="Copied!";
   }).catch(()=>{
-    id("copy-status").textContent="Could not copy automatically. Select the text and copy it manually.";
+    id("copy-status").textContent="Could not copy automatically.";
   });
 }
 
-// RESET
 function resetAll(){
-  if(!confirm("Delete all saved work on this device?")) return;
+  if(!confirm("Delete all saved work?")) return;
   localStorage.removeItem(KEY);
   location.reload();
 }
@@ -382,3 +364,4 @@ load();
 
 </body>
 </html>
+
