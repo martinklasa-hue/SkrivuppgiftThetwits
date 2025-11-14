@@ -27,7 +27,7 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;}
 .student-info{display:flex;gap:10px;flex-wrap:wrap;}
 .student-info input{padding:6px 10px;border-radius:999px;border:1px solid var(--border);}
 
-main{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+main{display:grid;grid-template-columns:1fr 320px;gap:16px;}
 @media(max-width:900px){main{grid-template-columns:1fr;}}
 
 .card{
@@ -38,9 +38,10 @@ main{display:grid;grid-template-columns:1fr 300px;gap:16px;}
 .field-group{margin-top:10px;display:flex;flex-direction:column;gap:4px;}
 textarea,input[type=text]{
   border:1px solid #ddd;border-radius:10px;padding:8px;
-  background:#fafafa;resize:vertical;
+  background:#fafafa;resize:vertical;font-family:inherit;font-size:0.9rem;
 }
-textarea.essay{min-height:220px;}
+textarea{min-height:70px;}
+textarea.essay{min-height:300px;} /* större skrivruta */
 
 button{
   border:none;cursor:pointer;padding:8px 14px;font-weight:600;
@@ -59,6 +60,10 @@ button{
   border-radius:12px;border:1px solid #ddd;max-height:350px;overflow:auto;}
 
 .tips{margin-top:12px;border:1px dashed #aac;border-radius:10px;padding:10px;}
+.tips h4{margin:0 0 4px;font-size:0.95rem;}
+.tips ul{margin:4px 0 0 18px;font-size:0.9rem;padding:0;}
+.tips p{margin:4px 0;font-size:0.9rem;}
+.small-muted{font-size:0.8rem;color:var(--muted);}
 </style>
 </head>
 
@@ -89,7 +94,7 @@ button{
 <!-- STEP 1 -->
 <div class="step active" data-step="1">
   <h2>🎭 Step 1 – Quick warm-up</h2>
-  <p>Write only 1–2 short sentences per box.</p>
+  <p>Write only 1–2 short sentences per box. This is just to get started.</p>
 
   <div class="field-group">
     <label>Who are you and where are you?</label>
@@ -109,11 +114,12 @@ button{
 <!-- STEP 2 -->
 <div class="step" data-step="2">
   <h2>🧠 Step 2 – Short notes</h2>
-  <p>Write a few words or very short sentences.</p>
+  <p>Use these boxes to make quick notes that will help you write your essay in Step 3.  
+     Only write a few words or very short sentences – not a full text.</p>
 
   <div class="field-group">
-    <label>The house and garden</label>
-    <small>Short notes only.</small>
+    <label>The Twits’ house and garden</label>
+    <small>Short notes only (3–5 keywords or very short sentences).</small>
     <textarea id="plan-house"></textarea>
   </div>
 
@@ -125,19 +131,23 @@ button{
 
   <div class="field-group">
     <label>The Roly-Poly Bird</label>
-    <small>A few words.</small>
+    <small>Who helps you? A few words.</small>
     <textarea id="plan-bird"></textarea>
   </div>
 
   <div class="field-group">
     <label>Your plan to escape</label>
+    <small>Brief notes.</small>
     <textarea id="plan-plan"></textarea>
   </div>
 
   <div class="field-group">
     <label>Your escape</label>
+    <small>What happens in the end? Short notes.</small>
     <textarea id="plan-escape"></textarea>
   </div>
+
+  <p class="small-muted">This is only your plan. The real writing happens in Step 3.</p>
 
   <button class="secondary" onclick="goStep(1)">← Back</button>
   <button class="primary" onclick="goStep(3)">Next →</button>
@@ -146,7 +156,7 @@ button{
 <!-- STEP 3 -->
 <div class="step" data-step="3">
   <h2>✍️ Step 3 – Write your essay</h2>
-  <p>150–400 words</p>
+  <p>Now write your full story as Mr Muggle-Wump. Aim for <strong>150–400 words</strong>.</p>
 
   <textarea id="essay-text" class="essay" placeholder="Start your story here..."></textarea>
   <div id="word-count" class="word-count">Words: 0</div>
@@ -161,15 +171,15 @@ button{
 
   <div>
     <label><input type="checkbox" id="chk-spell"> Spelling checked</label><br>
-    <label><input type="checkbox" id="chk-grammar"> Grammar checked</label><br>
-    <label><input type="checkbox" id="chk-content"> Content included</label><br>
+    <label><input type="checkbox" id="chk-grammar"> Grammar checked (past tense, capital letters, full stops)</label><br>
+    <label><input type="checkbox" id="chk-content"> Content: house & garden, treatment, Roly-Poly Bird, plan, escape</label><br>
     <label><input type="checkbox" id="chk-paragraphs"> Clear paragraphs</label><br>
     <label><input type="checkbox" id="chk-length"> Between 150–400 words</label>
   </div>
 
   <div class="field-group">
     <label>Note to teacher (optional)</label>
-    <textarea id="note-teacher"></textarea>
+    <textarea id="note-teacher" placeholder="I am unsure about..."></textarea>
   </div>
 
   <button class="secondary" onclick="goStep(3)">← Back</button>
@@ -185,30 +195,53 @@ button{
   <button class="secondary" onclick="goStep(4)">← Back</button>
   <button class="secondary" onclick="resetAll()">Clear all data</button>
 
-  <p id="copy-status"></p>
+  <p id="copy-status" class="small-muted"></p>
+  <p class="small-muted">Your work is automatically saved in this browser using local storage.</p>
 </div>
 
 </section>
 
 <!-- RIGHT SIDEBAR -->
 <aside class="card">
-  <h3>💡 Tips</h3>
+  <h3>💡 Help & structure</h3>
+
   <div class="tips">
-    <strong>Structure</strong>
+    <h4>Structure – example paragraphs</h4>
     <ul>
-      <li>Paragraph 1: Life as prisoner</li>
-      <li>Paragraph 2: How Twits treat you</li>
-      <li>Paragraph 3: Roly-Poly Bird & plan</li>
-      <li>Paragraph 4: Escape & ending</li>
+      <li>Paragraph 1: Life as a prisoner – house, garden, the Twits, your feelings.</li>
+      <li>Paragraph 2: How they treat you, your family and other animals.</li>
+      <li>Paragraph 3: The Roly-Poly Bird and your plan.</li>
+      <li>Paragraph 4: The escape and the ending.</li>
     </ul>
   </div>
 
   <div class="tips">
-    <strong>Useful phrases</strong>
+    <h4>Useful phrases</h4>
     <ul>
       <li>I feel… because…</li>
       <li>Every day, I have to…</li>
+      <li>They always… / They never…</li>
+      <li>Finally, we decided to…</li>
       <li>In the end…</li>
+    </ul>
+  </div>
+
+  <div class="tips">
+    <h4>Word count</h4>
+    <p>The target is <strong>150–400 words</strong>.</p>
+    <p class="small-muted">
+      Fewer than 150 is usually too short. More than 400 can be hard to read – try to be clear and effective.
+      The counter updates automatically when you write.
+    </p>
+  </div>
+
+  <div class="tips">
+    <h4>Remember</h4>
+    <ul>
+      <li>You are Mr Muggle-Wump – use “I”.</li>
+      <li>Use past tense when you tell your story.</li>
+      <li>Use full stops and capital letters.</li>
+      <li>Think about feelings and details from the book.</li>
     </ul>
   </div>
 </aside>
@@ -276,11 +309,11 @@ function fill(){
   updateCount();
 }
 
-// SHORTCUT
+// SHORTCUTS
 function id(x){return document.getElementById(x)}
 function chk(x){return document.getElementById(x)}
 
-// EVENTS
+// INPUT EVENTS
 document.addEventListener("input", e=>{
   let t=e.target.id;
   if(t=="student-name") state.name=e.target.value;
@@ -294,7 +327,6 @@ document.addEventListener("input", e=>{
   if(t=="plan-escape") state.escape=e.target.value;
   if(t=="essay-text"){ state.essay=e.target.value; updateCount(); }
   if(t=="note-teacher") state.note=e.target.value;
-
   save();
 });
 
@@ -315,7 +347,7 @@ function updateCount(){
   let el=id("word-count");
   el.textContent="Words: "+w+" (target 150–400)";
   el.className="word-count";
-  if(w==0) el.classList.add("critical");
+  if(w===0) el.classList.add("critical");
   else if(w<150) el.classList.add("low");
   else if(w>400) el.classList.add("high");
   else el.classList.add("ok");
@@ -323,14 +355,20 @@ function updateCount(){
 
 // COPY
 function copyEssay(){
+  if(!state.essay.trim()){
+    id("copy-status").textContent="No text to copy.";
+    return;
+  }
   navigator.clipboard.writeText(state.essay).then(()=>{
-    id("copy-status").textContent="Copied!";
+    id("copy-status").textContent="Copied! You can paste it into Classroom/Teams.";
+  }).catch(()=>{
+    id("copy-status").textContent="Could not copy automatically. Select the text and copy it manually.";
   });
 }
 
 // RESET
 function resetAll(){
-  if(!confirm("Delete all saved work?")) return;
+  if(!confirm("Delete all saved work on this device?")) return;
   localStorage.removeItem(KEY);
   location.reload();
 }
@@ -340,5 +378,3 @@ load();
 
 </body>
 </html>
-
-
